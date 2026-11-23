@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chamada - SIGEM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- O link "Chamada" desta barra nao esta escrito aqui: ele entra pela secao
+       "Gestao", que o sessao.js monta so para administrador e professor. -->
+  <header class="sidebar">
+    <h1>SIGEM</h1><p class="sidebar-heading">Descubra</p>
+    <nav class="sidebar-nav"><a href="index.html"><span>⌂</span>Início</a><a href="pesquisa.html"><span>⌕</span>Pesquisa</a><a href="contatos.html"><span>◉</span>Contatos docentes</a></nav>
+    <p class="sidebar-heading">Área acadêmica</p>
+    <nav class="sidebar-nav"><a href="classes.html"><span>☷</span>Classes</a><a href="grupos.html"><span>♫</span>Grupos</a></nav>
+    <div class="sidebar-tools"><a href="conta.html"><span>⚙</span>Sua conta</a><button type="button" data-theme-toggle="dark" aria-pressed="false"><span>◐</span>Modo noturno <i></i></button><button type="button" data-theme-toggle="contrast" aria-pressed="false"><span>☼</span>Alto contraste</button></div>
+  </header>
+
+  <main>
+    <p class="overline">Frequência</p>
+    <h2>Chamada</h2>
+
+    <!-- Todas as secoes nascem escondidas: quem decide o que aparece e o
+         chamada.js, pelo perfil de quem esta logado. -->
+
+    <section class="cartao" id="bloco-sem-login" hidden>
+      <p>Para fazer a chamada, <a href="login.html">entre no sistema</a>.</p>
+    </section>
+
+    <section class="cartao" id="bloco-so-professor" hidden>
+      <p>A chamada é feita pelo professor da turma.</p>
+    </section>
+
+    <!-- So para professor e administrador -->
+    <section id="bloco-aulas" hidden>
+      <p class="lead-copy">Escolha uma aula de turma para marcar presença e falta. A mais recente aparece primeiro.</p>
+      <div class="cartao agenda-filtros">
+        <div class="campo">
+          <label for="filtro-inicio">Aulas a partir de</label>
+          <input id="filtro-inicio" type="date">
+          <small class="ajuda">A lista vai dessa data até hoje. Aula futura ainda não tem chamada.</small>
+        </div>
+        <button type="button" id="botao-filtrar">Atualizar lista</button>
+      </div>
+      <div id="lista-aulas" class="agenda-grid"></div>
+    </section>
+
+    <p id="mensagem-aulas" class="mensagem"></p>
+
+    <section class="cartao chamada-card" id="bloco-chamada" hidden>
+      <p class="overline" id="chamada-curso"></p>
+      <h3 id="chamada-turma"></h3>
+      <p class="agenda-data" id="chamada-data"></p>
+      <p id="aviso-chamada" class="aviso" hidden></p>
+      <form id="formulario-chamada">
+        <ul id="lista-chamada" class="lista-chamada"></ul>
+        <button type="submit" id="botao-salvar">Salvar chamada</button>
+      </form>
+      <p id="mensagem-chamada" class="mensagem"></p>
+    </section>
+  </main>
+
+  <!-- sessao.js vem ANTES: esta tela usa o Sessao logo ao carregar, para saber
+       o perfil e escolher o que mostrar. -->
+  <script src="js/sessao.js"></script>
+  <script src="js/chamada.js"></script>
+  <script src="js/rodape.js"></script>
+</body>
+</html>

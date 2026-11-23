@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de aluno - SIGEM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-ocultar-sessao>
+  <header class="sidebar"><h1>SIGEM</h1><p class="sidebar-heading">Cadastro de aluno</p><p class="sidebar-copy">Crie seu acesso para acompanhar suas aulas e classes.</p><div class="sidebar-tools"><a href="cadastro.html"><span>←</span>Trocar perfil</a><button type="button" data-theme-toggle="dark" aria-pressed="false"><span>◐</span>Modo noturno <i></i></button></div></header>
+  <main class="public-main form-main">
+    <div class="page-tools"><div><p class="overline">Novo acesso</p><h2>Cadastro de aluno</h2></div><a class="text-link" href="login.html">Já tenho uma conta</a></div>
+    <section class="cartao cadastro-card"><form id="formulario-cadastro">
+      <div class="campo"><label for="nome">Nome completo</label><input id="nome" type="text" maxlength="150" minlength="2" required></div>
+      <div class="campo"><label for="email">E-mail</label><input id="email" type="email" maxlength="150" autocomplete="email" required></div>
+      <div class="campo"><label for="senha">Senha</label><div class="campo-com-botao"><input id="senha" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}" title="Use pelo menos 8 caracteres, uma letra maiúscula, uma minúscula, um número e um caractere especial." autocomplete="new-password" required><button type="button" id="mostrar-senha" class="secundario">Mostrar</button></div><small id="dica-senha" class="ajuda">Mínimo de 8 caracteres, com maiúscula, minúscula, número e caractere especial.</small></div>
+      <div class="campo"><label for="senha-confirmacao">Confirme a senha</label><input id="senha-confirmacao" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}" title="Repita uma senha com maiúscula, minúscula, número e caractere especial." autocomplete="new-password" required></div>
+      <div class="campo"><label for="data-nascimento">Data de nascimento</label><input id="data-nascimento" type="date"></div>
+      <button type="submit">Criar cadastro</button>
+    </form><p id="mensagem" class="mensagem"></p></section>
+  </main>
+  <script src="js/sessao.js"></script><script src="js/cadastro.js"></script><script src="js/senha-ui.js"></script><script src="js/rodape.js"></script>
+</body>
+</html>

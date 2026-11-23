@@ -1,0 +1,1545 @@
+/* Estilos compartilhados por todas as telas do SIGEM.
+   Ficam todos aqui, e nao espalhados por tela, para que duas pessoas possam
+   trabalhar em telas diferentes sem editar o mesmo arquivo de estilo. */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f5f5f5;
+  color: #222;
+}
+
+/* ---------- Cabecalho e menu ---------- */
+
+header {
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 1rem 2rem;
+}
+
+header h1 {
+  font-size: 1.75rem;
+}
+
+nav {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+nav a {
+  color: #cfd8e3;
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding-bottom: 0.2rem;
+}
+
+nav a:hover {
+  color: #fff;
+}
+
+nav a.ativo {
+  color: #fff;
+  border-bottom: 2px solid #fff;
+}
+
+/* ---------- Conteudo ---------- */
+
+main {
+  padding: 2rem;
+  /* RNF04: em telas largas o texto para de esticar e continua legivel */
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+main h2 {
+  font-size: 1.55rem;
+  margin-bottom: 0.5rem;
+}
+
+.cartao {
+  background-color: #fff;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.cartao h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- Formularios ---------- */
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.9rem;
+}
+
+.campo label {
+  font-size: 1.15rem;
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  padding: 0.55rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 1.25rem;
+  /* sem isso o input estoura a largura do cartao no celular */
+  width: 100%;
+}
+
+.campo textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.capa-editor {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) minmax(220px, 1fr);
+  gap: 1rem 1.5rem;
+  align-items: start;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #dededb;
+  border-radius: 10px;
+  background: #fafaf8;
+}
+
+.capa-editor-preview {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #e8e8e3;
+}
+
+.capa-editor-preview img { width: 100%; height: 100%; object-fit: cover; transform-origin: center; }
+.capa-ajustes { display: grid; gap: 0.4rem; }
+.capa-ajustes .campo { margin: 0; }
+.capa-ajustes input[type='range'] { width: 100%; padding: 0; }
+.capa-ajustes label { display: flex; justify-content: space-between; gap: 1rem; }
+.capa-ajustes output { color: var(--cinza-texto); font-weight: 700; }
+
+.campo-duplo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.campo-horario {
+  gap: 0.5rem;
+}
+
+.aviso {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid #9a6b00;
+  background: #fff8df;
+  color: #6b4c00;
+}
+
+/* Campo com um botao colado do lado, como o "mostrar senha" */
+.campo-com-botao {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* O display: flex acima venceria o atributo hidden. */
+.campo-com-botao[hidden] { display: none; }
+
+.campo-com-botao input {
+  flex: 1;
+  /* min-width: 0 impede o input de estourar o flex no celular */
+  min-width: 0;
+}
+
+.ajuda {
+  margin-top: 0.3rem;
+  font-size: 1.15rem;
+  color: #666;
+}
+
+.ajuda.fraca  { color: #a33a3a; }
+.ajuda.media  { color: #9a6b00; }
+.ajuda.forte  { color: #1e7d34; }
+
+/* ---------- Botoes ---------- */
+
+button {
+  background-color: #2c3e50;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.25rem;
+}
+
+button:hover {
+  background-color: #1a252f;
+}
+
+button.secundario {
+  background-color: #6b7c8c;
+}
+
+button.perigo {
+  background-color: #a33a3a;
+}
+
+button.pequeno {
+  padding: 0.35rem 0.65rem;
+  font-size: 1.1rem;
+}
+
+/* ---------- Tabelas de listagem ---------- */
+
+/* O wrapper permite a tabela rolar de lado no celular em vez de espremer as
+   colunas ate ficarem ilegiveis. */
+.tabela-wrapper {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  font-size: 1.25rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #e2e2e2;
+  white-space: nowrap;
+}
+
+th {
+  background-color: #eceff1;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ---------- Mensagens ---------- */
+
+#resultado,
+.mensagem {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.mensagem.sucesso { color: #1e7d34; }
+.mensagem.erro    { color: #a33a3a; }
+
+.lista-alunos {
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.lista-alunos li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+/* ---------- Rodape e changelog ---------- */
+
+.rodape-sistema {
+  display: none;
+  justify-content: center;
+  padding: 1.5rem 1rem 2rem;
+}
+
+.versao-sistema {
+  background: none;
+  border: 1px solid #bbb;
+  color: #666;
+  font-size: 1.1rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.versao-sistema:hover:not(:disabled) {
+  background-color: #fff;
+  color: #2c3e50;
+}
+
+.versao-sistema:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* Na barra lateral (o rodape.js poe o rodape la), order: 3 o coloca depois
+   das ferramentas (order: 1) e da barra de sessao (order: 2). */
+header.sidebar .rodape-sistema {
+  order: 3;
+  justify-content: flex-start;
+  padding: 12px 0 0;
+}
+
+/* Login, recuperar e redefinir senha nao tem .sidebar-tools, que e quem
+   empurra o pe da barra para baixo (margin-top: auto). Nelas, o proprio
+   rodape faz isso. So nelas: duas margens automaticas dividiriam o espaco
+   livre, e as ferramentas subiriam para o meio da barra. */
+header.sidebar:not(:has(.sidebar-tools)) .rodape-sistema {
+  margin-top: auto;
+}
+
+/* Segue a cor do texto da barra: preto no amarelo, claro no verde do modo
+   noturno. O cinza fixo (#666) sumiria no verde. */
+header.sidebar .versao-sistema {
+  color: inherit;
+  border-color: currentColor;
+}
+
+/* <dialog> e uma tag nativa do navegador: ja vem com o fundo escurecido
+   (::backdrop) e a centralizacao na tela, sem precisar de biblioteca. */
+.dialogo-changelog {
+  width: min(600px, 90vw);
+  max-height: 80vh;
+  border: none;
+  border-radius: 6px;
+  padding: 0;
+}
+
+.dialogo-changelog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.dialogo-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e2e2e2;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
+
+.dialogo-cabecalho h2 {
+  font-size: 1.35rem;
+}
+
+.dialogo-corpo {
+  padding: 1.25rem;
+  overflow-y: auto;
+  max-height: calc(80vh - 4rem);
+}
+
+.dialogo-corpo h3 { font-size: 1.25rem; margin-top: 1.25rem; color: #2c3e50; }
+.dialogo-corpo h4 { font-size: 1.15rem; margin-top: 0.75rem; color: #555; }
+.dialogo-corpo p  { margin-top: 0.5rem; font-size: 1.15rem; color: #555; }
+.dialogo-corpo ul { margin-top: 0.4rem; padding-left: 1.2rem; }
+.dialogo-corpo li { font-size: 1.15rem; margin-top: 0.3rem; }
+
+/* ---------- Celular ---------- */
+
+@media (max-width: 600px) {
+  header { padding: 1rem; }
+  main   { padding: 1rem; }
+  nav    { gap: 1rem; }
+  .campo-duplo { grid-template-columns: 1fr; gap: 0; }
+}
+
+/* ---------- Barra de sessao (RF06) ---------- */
+
+/* Estas tres regras completam as que ja existem la em cima, em vez de alterar
+   aquelas linhas. O CSS soma as declaracoes do mesmo seletor, entao o cabecalho
+   continua com o padding e a cor definidos antes e ganha so o comportamento
+   novo. Escrito assim de proposito: mexer nas regras originais aumentaria a
+   chance de conflito no Git com quem estiver trabalhando em outra tela. */
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Empurra a barra de sessao para a direita, na mesma linha do titulo. */
+header h1 {
+  margin-right: auto;
+}
+
+/* Forca o menu a ocupar a linha inteira, abaixo do titulo e da sessao. */
+nav {
+  flex-basis: 100%;
+}
+
+.barra-sessao {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+}
+
+.usuario-logado {
+  color: #cfd8e3;
+}
+
+/* Menor que os botoes do corpo da pagina: e um controle de canto, nao a acao
+   principal de nenhuma tela. */
+.barra-sessao button {
+  padding: 0.35rem 0.8rem;
+  font-size: 1.1rem;
+}
+
+.entrar-sistema {
+  color: #cfd8e3;
+  text-decoration: none;
+  border: 1px solid #6b7c8c;
+  border-radius: 4px;
+  padding: 0.35rem 0.8rem;
+}
+
+.entrar-sistema:hover {
+  color: #fff;
+  border-color: #cfd8e3;
+}
+
+/* O acesso de visitantes fica nas ações do conteúdo; não repetir na barra. */
+header.sidebar .entrar-sistema { display: none; }
+
+/* ---------- Tela de login (RF06) ---------- */
+
+/* A tela de login nao tem menu nem tabela: e um cartao unico e centralizado.
+   Largura limitada porque um formulario de dois campos esticado numa tela larga
+   fica estranho e dificil de ler. */
+.cartao-login {
+  max-width: 380px;
+  margin: 3rem auto 0;
+}
+
+@media (max-width: 600px) {
+  /* No celular a barra vai para baixo do titulo, ocupando a linha toda, em vez
+     de espremer o nome do usuario ao lado do "SIGEM". */
+  .barra-sessao {
+    flex-basis: 100%;
+    margin-top: 0.75rem;
+  }
+
+  .cartao-login {
+    margin-top: 1rem;
+  }
+}
+
+/* ---------- Camada visual inspirada no layout do Figma ---------- */
+
+:root {
+  --amarelo-figma: #ffda5c;
+  --azul-acao: #0aa8ee;
+  --preto: #101010;
+  --cinza-texto: #686868;
+  --fundo: #f7f7f5;
+  --verde-suave: #d2f1df;
+  --raio-card: 12px;
+}
+
+body {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--fundo);
+  color: var(--preto);
+  font-family: Arial, Helvetica, sans-serif;
+  /* Texto comum de aproximadamente 13 pt no LibreOffice. */
+  font-size: 1.33rem;
+}
+
+header.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 100vh;
+  height: 100vh;
+  padding: 28px 14px 20px;
+  overflow-y: auto;
+  background: var(--amarelo-figma);
+  color: var(--preto);
+}
+
+.sidebar h1 {
+  margin: 0 10px 34px;
+  font-size: 1.45rem;
+  letter-spacing: -0.04em;
+}
+
+.sidebar-heading {
+  margin: 0 10px 9px;
+  color: #40370f;
+  font-size: 1.13rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-basis: auto;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0 0 25px;
+}
+
+.sidebar-nav a,
+.sidebar-tools a,
+.sidebar-tools button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--preto);
+  font-size: 1.23rem;
+  text-decoration: none;
+  text-align: left;
+  white-space: nowrap;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.sidebar-nav a:hover,
+.sidebar-tools a:hover,
+.sidebar-tools button:hover,
+.sidebar-nav a.ativo {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--preto);
+}
+
+.sidebar-nav a:hover,
+.sidebar-tools a:hover,
+.sidebar-tools button:hover {
+  transform: translateX(2px);
+}
+
+.sidebar-nav a span,
+.sidebar-tools span {
+  display: inline-grid;
+  width: 17px;
+  place-items: center;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.sidebar-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: auto;
+  order: 1;
+}
+
+.sidebar-tools button {
+  background: transparent;
+  font-family: inherit;
+  font-size: 1.15rem;
+}
+
+.sidebar-tools button i {
+  width: 34px;
+  height: 20px;
+  margin-left: auto;
+  border-radius: 999px;
+  background: #fff;
+  position: relative;
+}
+
+.sidebar-tools button i::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #6546b9;
+}
+
+.sidebar-copy {
+  margin: 0 10px;
+  color: #40370f;
+  font-size: 1.23rem;
+  line-height: 1.5;
+}
+
+header.sidebar .barra-sessao {
+  order: 2;
+  align-self: stretch;
+  margin: 12px 0 0;
+}
+
+header.sidebar .usuario-logado {
+  color: #40370f;
+  font-size: 1.1rem;
+}
+
+/* A regra generica "nav { flex-wrap: wrap }", do cabecalho antigo, tambem
+   pegava a barra lateral. Sem altura para todos os links (os 8 do admin, ou
+   uma tela de 768 px de altura, como a de um projetor), a barra encolhia cada
+   lista e os links quebravam para uma segunda coluna, cortada fora da barra.
+   Aqui nada encolhe nem quebra: a barra ja tem overflow-y: auto, e rola. */
+header.sidebar { flex-wrap: nowrap; }
+header.sidebar > * { flex-shrink: 0; }
+/* Seletor fraco de proposito: no celular, a regra de .sidebar-nav do @media
+   (mais abaixo) poe os links lado a lado com quebra, e precisa vencer esta. */
+.sidebar-nav { flex-wrap: nowrap; }
+/* O nome e o "Sair" nao cabem lado a lado em 280 px: o botao desce. */
+header.sidebar .barra-sessao { flex-wrap: wrap; }
+
+/* O display: flex do .campo vence o atributo hidden do HTML: o professor via
+   "Professor" e "Status" ao pedir uma turma, e a Agenda mostrava a lista de
+   grupos com "turma" marcado. Mesmo caso do .aviso-capslock[hidden]. */
+.campo[hidden] { display: none; }
+
+/* A previa da capa nasce sem imagem; sem isto, o navegador mostra o icone de
+   imagem quebrada com o texto alternativo no lugar. */
+img:not([src]), img[src=""] { visibility: hidden; }
+
+header.sidebar .barra-sessao button {
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--preto);
+}
+
+main {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 34px clamp(24px, 5vw, 72px) 56px;
+}
+
+main h2 {
+  color: var(--preto);
+  font-size: clamp(1.9rem, 3vw, 2.7rem);
+  letter-spacing: -0.055em;
+}
+
+main h3,
+.cartao h3 {
+  color: var(--preto);
+  letter-spacing: -0.025em;
+}
+
+.page-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 40px;
+}
+
+.view-switch {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 9px;
+  background: #ededeb;
+}
+
+.view-switch button {
+  padding: 0.45rem 0.8rem;
+  border-radius: 6px;
+  background: transparent;
+  color: #656565;
+  font-size: 1.1rem;
+}
+
+.view-switch button.selecionado,
+.view-switch button:hover {
+  background: #fff;
+  color: var(--preto);
+}
+
+.page-cta,
+.page-cta:visited {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  background: var(--azul-acao);
+  color: #fff;
+  font-size: 1.17rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(10, 168, 238, 0.16);
+}
+
+.page-cta:hover {
+  background: #078fcd;
+  color: #fff;
+}
+
+.page-cta span,
+.section-heading span {
+  font-size: 1.1rem;
+  line-height: 0.8;
+}
+
+.cartao,
+.diagnostico-card,
+.progresso-card {
+  border: 0;
+  border-radius: var(--raio-card);
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(25, 25, 25, 0.045);
+}
+
+.cartao {
+  padding: clamp(1.1rem, 3vw, 1.8rem);
+}
+
+.cartao form {
+  max-width: 760px;
+}
+
+.campo label {
+  color: #363636;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.campo input,
+.campo select,
+.campo textarea,
+.campo-com-botao select {
+  border: 1px solid #dededb;
+  border-radius: 7px;
+  background: #fbfbfa;
+  color: var(--preto);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus,
+.campo-com-botao select:focus {
+  border-color: var(--azul-acao);
+  box-shadow: 0 0 0 3px rgba(10, 168, 238, 0.13);
+}
+
+button:not(.secundario):not(.perigo):not(.versao-sistema) {
+  background: var(--azul-acao);
+}
+
+button:not(.secundario):not(.perigo):not(.versao-sistema):hover {
+  background: #078fcd;
+}
+
+.tabela-wrapper {
+  margin-top: 1.5rem;
+  border-radius: var(--raio-card);
+  box-shadow: 0 10px 30px rgba(25, 25, 25, 0.045);
+}
+
+table {
+  border-radius: var(--raio-card);
+  overflow: hidden;
+}
+
+th {
+  background: #f0f0ed;
+  color: #656565;
+  font-size: 1.1rem;
+}
+
+td {
+  background: #fff;
+  color: #303030;
+}
+
+.boas-vindas {
+  margin-bottom: 38px;
+}
+
+.boas-vindas h2 {
+  margin: 0.35rem 0 0.55rem;
+}
+
+.boas-vindas > p:last-child {
+  color: var(--cinza-texto);
+}
+
+.overline {
+  color: #777;
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dashboard-section {
+  margin-top: 2rem;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section-heading h2 {
+  margin-top: 0.3rem;
+  font-size: 1.8rem;
+}
+
+.section-heading a {
+  color: #555;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.section-heading a:hover { color: var(--azul-acao); }
+
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.playlist-card {
+  display: flex;
+  min-height: 190px;
+  flex-direction: column;
+  justify-content: end;
+  gap: 0.3rem;
+  padding: 1rem;
+  border-radius: 9px;
+  color: #fff;
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+.playlist-card::before {
+  content: '♫';
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: -1;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.playlist-card::after {
+  content: '';
+  position: absolute;
+  inset: 38% 0 0;
+  z-index: -1;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+}
+
+.playlist-card strong { font-size: 1.45rem; letter-spacing: -0.035em; }
+.playlist-card span { font-size: 1.1rem; opacity: 0.82; }
+.playlist-card.com-capa,
+.trilha-icone.com-capa { background-position: center; background-size: cover; }
+.capa-um { background: linear-gradient(135deg, #46634e, #c77e51 65%, #172b2b); }
+.capa-dois { background: linear-gradient(135deg, #080808, #555 48%, #d4d4d4); }
+.capa-tres { background: linear-gradient(135deg, #5f493d, #a86b65 52%, #26372f); }
+.capa-quatro { background: linear-gradient(135deg, #172a31, #1c5d74 60%, #e5a75e); }
+
+.progresso-card {
+  display: grid;
+  grid-template-columns: auto minmax(140px, 1fr) auto;
+  align-items: end;
+  gap: 1.25rem;
+  margin-top: 2rem;
+  padding: 1.2rem 1.4rem;
+  background: var(--verde-suave);
+}
+
+.progresso-card h2 { margin: 0.25rem 0; font-size: 1.5rem; }
+.progresso-card p:last-child { color: #4d6d5a; font-size: 1.15rem; }
+.barra-progresso { height: 3px; margin-bottom: 7px; background: #fff; }
+.barra-progresso span { display: block; width: 0; height: 100%; background: #e9a900; transition: width 220ms ease; }
+.progresso-card > strong { color: #4d6d5a; font-size: 1.15rem; }
+
+.trilhas-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.trilhas-grid a {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: var(--preto);
+  text-decoration: none;
+}
+
+.trilha-icone {
+  display: grid;
+  aspect-ratio: 1;
+  place-items: center;
+  margin-bottom: 0.3rem;
+  border-radius: 9px;
+  color: #fff;
+  font-size: 2.6rem;
+}
+
+.trilha-icone.coral { background: linear-gradient(145deg, #ed9e9a, #4b526d); }
+.trilha-icone.azul { background: linear-gradient(145deg, #62acee, #274d8b); }
+.trilha-icone.laranja { background: linear-gradient(145deg, #ff6c39, #dc3b2e); }
+.trilha-icone.verde { background: linear-gradient(145deg, #537770, #20272d); }
+.trilha-icone.vermelho { background: linear-gradient(145deg, #dc3733, #9d121c); }
+.trilhas-grid strong { font-size: 1.25rem; }
+.trilhas-grid small { color: var(--cinza-texto); font-size: 1.1rem; }
+
+.diagnostico-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.diagnostico-card h3 { margin: 0.3rem 0; font-size: 1.4rem; }
+.diagnostico-card p:not(.overline):not(#resultado) { color: var(--cinza-texto); font-size: 1.15rem; }
+
+.lista-alunos li { background: #fff; }
+
+body[data-tela-login] main {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+.cartao-login {
+  /* 25% da area util, descontando os 224px da barra lateral. O minimo evita
+     que o formulario fique estreito em notebooks, e o maximo preserva a
+     leitura em monitores muito largos. */
+  width: clamp(520px, calc((100vw - 224px) * 0.25), 720px);
+  max-width: calc(100% - 2rem);
+  padding: 2rem;
+  margin: 0;
+}
+
+/* A tela de login recebe mais 2px de legibilidade sem alterar as demais telas. */
+body[data-tela-login] {
+  font-size: 1.41rem;
+}
+
+body[data-tela-login] .cartao-login h3 {
+  font-size: 1.43rem;
+}
+
+body[data-tela-login] .campo label {
+  font-size: 1.2rem;
+}
+
+body[data-tela-login] .campo input,
+body[data-tela-login] .campo-com-botao button,
+body[data-tela-login] form > button {
+  font-size: 1.38rem;
+}
+
+body[data-tela-login] .campo input {
+  color: var(--preto);
+  caret-color: var(--azul-acao);
+}
+
+body[data-tela-login] .form-footnote {
+  font-size: 1.23rem;
+}
+
+@media (max-width: 900px) {
+  body { grid-template-columns: 245px minmax(0, 1fr); }
+  .cartao-login {
+    width: min(520px, calc(100% - 2rem));
+  }
+  .playlist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trilhas-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  body { display: block; }
+  header.sidebar { position: static; min-height: auto; height: auto; padding: 18px 14px; }
+  .sidebar h1 { margin-bottom: 18px; }
+  .sidebar-heading { margin-top: 12px; }
+  .sidebar-nav { flex-direction: row; flex-wrap: wrap; margin-bottom: 8px; }
+  .sidebar-nav a { width: auto; flex: 1 1 130px; }
+  .sidebar-tools { display: none; }
+  header.sidebar .barra-sessao { order: 0; margin: 0 0 10px; }
+  main { padding: 26px 18px 40px; }
+  .cartao-login {
+    width: 100%;
+    max-width: none;
+    padding: 1.5rem;
+  }
+  .page-tools { align-items: flex-start; flex-direction: column; margin-bottom: 28px; }
+  .capa-editor { grid-template-columns: 1fr; }
+  .page-cta { align-self: stretch; justify-content: center; }
+  .playlist-grid, .trilhas-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .progresso-card, .diagnostico-card { grid-template-columns: 1fr; align-items: start; flex-direction: column; }
+  .diagnostico-card { display: block; }
+  .barra-progresso { margin-top: 1rem; }
+}
+
+/* Os controles de navegacao mantem o tratamento neutro mesmo com o estilo
+   azul global dos botoes de acao. */
+.view-switch button {
+  background: transparent !important;
+  color: #656565;
+}
+
+.view-switch a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.8rem;
+  border-radius: 6px;
+  color: #656565;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.view-switch a:hover {
+  background: #fff;
+  color: var(--preto);
+}
+
+.view-switch button.selecionado,
+.view-switch button:hover {
+  background: #fff !important;
+  color: var(--preto);
+}
+
+.sidebar-tools button {
+  background: transparent !important;
+  color: var(--preto);
+}
+
+.sidebar-tools button:hover {
+  background: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* ---------- Temas da interface ---------- */
+body.modo-noturno {
+  --fundo: #171715;
+  --preto: #f5f3ed;
+  --cinza-texto: #bbb9b1;
+  background: var(--fundo);
+}
+
+body.modo-noturno main h2,
+body.modo-noturno main h3,
+body.modo-noturno .cartao h3,
+body.modo-noturno .section-heading a,
+body.modo-noturno .trilhas-grid a {
+  color: var(--preto);
+}
+
+body.modo-noturno header.sidebar {
+  background: #007832;
+  color: #fff8d7;
+}
+
+body.modo-noturno .sidebar-heading,
+body.modo-noturno .sidebar-copy,
+body.modo-noturno .sidebar-nav a,
+body.modo-noturno .sidebar-tools a,
+body.modo-noturno .sidebar-tools button {
+  color: #fff8d7;
+}
+
+body.modo-noturno .sidebar-nav a.ativo,
+body.modo-noturno .sidebar-nav a:hover,
+body.modo-noturno .sidebar-tools a:hover,
+body.modo-noturno .sidebar-tools button:hover {
+  background: #5c5121 !important;
+  color: #fff;
+}
+
+body.modo-noturno .view-switch {
+  background: #2b2b28;
+}
+
+body.modo-noturno .view-switch button {
+  color: #b8b6ae;
+}
+
+body.modo-noturno .view-switch button.selecionado,
+body.modo-noturno .view-switch button:hover {
+  background: #45453f !important;
+  color: #fff;
+}
+
+body.modo-noturno .cartao,
+body.modo-noturno .diagnostico-card,
+body.modo-noturno .tabela-wrapper,
+body.modo-noturno table,
+body.modo-noturno td {
+  background: #242421;
+  color: #f5f3ed;
+}
+
+body.modo-noturno th {
+  background: #33332e;
+  color: #d2d0c7;
+}
+
+body.modo-noturno .campo label,
+body.modo-noturno .ajuda {
+  color: #d2d0c7;
+}
+
+body.modo-noturno .campo input,
+body.modo-noturno .campo select,
+body.modo-noturno .campo textarea,
+body.modo-noturno .campo-com-botao select {
+  border-color: #4b4b45;
+  background: #30302b;
+  color: #fff;
+}
+
+body.modo-noturno .progresso-card {
+  background: #20392b;
+}
+
+body.modo-noturno .lista-alunos li {
+  background: #242421;
+  color: #f5f3ed;
+  border-color: #4b4b45;
+}
+
+body.modo-noturno .aviso {
+  background: #3b341f;
+  color: #ffe9a3;
+  border-left-color: #d6ad37;
+}
+
+body.modo-noturno .search-tags button {
+  border-color: #5b5b53;
+  background: #33332e;
+  color: #fff;
+}
+
+body.modo-noturno .search-tags button:hover,
+body.modo-noturno .search-tags button.selecionado {
+  border-color: var(--azul-acao);
+  background: #087fae;
+  color: #fff;
+}
+
+body.alto-contraste .sidebar-nav a,
+body.alto-contraste .sidebar-tools a,
+body.alto-contraste .sidebar-tools button,
+body.alto-contraste .page-cta,
+body.alto-contraste button {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+body.alto-contraste .cartao,
+body.alto-contraste .diagnostico-card,
+body.alto-contraste .tabela-wrapper {
+  box-shadow: 0 0 0 2px currentColor;
+}
+
+/* ---------- Fluxos publicos e area do aluno ---------- */
+.public-page-tools {
+  align-items: center;
+  margin-bottom: 72px;
+}
+
+.public-page-tools > .overline { margin: 0; }
+
+.public-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.public-actions .page-cta,
+.public-login-note .page-cta,
+.account-card .page-cta {
+  background: var(--azul-acao);
+}
+
+.public-hero {
+  max-width: 790px;
+  margin-bottom: 3.3rem;
+}
+
+.public-hero h2 { max-width: 680px; font-size: clamp(2.6rem, 6vw, 5.05rem); }
+.public-hero > p:last-child { max-width: 550px; font-size: 1.25rem; line-height: 1.7; }
+
+.public-highlights,
+.choice-grid,
+.contact-grid,
+.group-grid,
+.student-class-grid,
+.search-results {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.public-highlight,
+.choice-card,
+.group-card,
+.search-result {
+  color: var(--preto);
+  text-decoration: none;
+}
+
+.public-highlight { min-height: 190px; transition: transform 160ms ease, box-shadow 160ms ease; }
+.public-highlight:hover,
+.choice-card:hover,
+.group-card:hover,
+.search-result:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(25, 25, 25, 0.1); }
+.highlight-icon,
+.choice-icon,
+.contact-icon,
+.search-result-icon { color: var(--azul-acao); font-size: 2rem; }
+.public-highlight h3,
+.choice-card h3,
+.group-card h3 { margin: 0.6rem 0 0.3rem; }
+.public-highlight p,
+.choice-card p,
+.group-card p { color: var(--cinza-texto); line-height: 1.55; }
+
+.public-login-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.public-login-note h3 { margin: 0.35rem 0; }
+.public-login-note p:last-child { color: var(--cinza-texto); }
+
+.choice-main { max-width: 1100px; }
+.lead-copy { max-width: 680px; color: var(--cinza-texto); line-height: 1.65; }
+.choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 2rem; }
+.choice-card { min-height: 250px; }
+.choice-action,
+.group-card a,
+.contact-card a,
+.student-class-card a { display: inline-block; margin-top: 1rem; color: var(--azul-acao); font-size: 1.15rem; font-weight: 700; }
+.text-link { color: var(--cinza-texto); font-size: 1.15rem; font-weight: 700; text-decoration: none; }
+.text-link:hover { color: var(--azul-acao); }
+
+.form-main { max-width: 980px; }
+.cadastro-card { max-width: 900px; }
+.cadastro-card form { max-width: none; }
+
+.student-class-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 2rem; }
+.student-class-card { min-height: 225px; }
+.student-class-cover {
+  height: 150px;
+  margin: -1.8rem -1.8rem 1rem;
+  overflow: hidden;
+  background: var(--amarelo-suave);
+}
+.student-class-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center;
+}
+.student-class-card h3 { margin: 0.3rem 0 0.8rem; }
+.student-class-card > p:not(.overline):not(.class-teacher) { color: var(--cinza-texto); }
+.class-teacher { margin-top: 0.7rem; color: var(--cinza-texto); font-size: 1.15rem; }
+.empty-state { display: grid; grid-column: 1 / -1; justify-items: start; gap: 0.5rem; padding: 2rem; }
+.empty-state > span { color: var(--azul-acao); font-size: 2rem; }
+.empty-state h3, .empty-state p { margin: 0; }
+.empty-state p { color: var(--cinza-texto); }
+
+.contact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 1.25rem 0 2.5rem; }
+.contact-card { display: flex; align-items: flex-start; gap: 1rem; }
+.contact-card h3 { margin: 0.3rem 0; }
+.contact-card p:not(.overline) { margin: 0.4rem 0; color: var(--cinza-texto); font-size: 1.15rem; }
+.contact-card a { margin-top: 0.4rem; }
+.contact-card .chat-indisponivel { display: block; margin-top: 0.8rem; }
+
+.search-box { max-width: 930px; }
+.search-box > label { display: block; margin-bottom: 0.55rem; color: var(--cinza-texto); font-size: 1.15rem; font-weight: 700; }
+.search-input { display: flex; align-items: center; gap: 0.75rem; padding: 0.2rem 0; border-bottom: 2px solid #dededb; }
+.search-input span { color: var(--azul-acao); font-size: 1.4rem; }
+.search-input input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--preto); font: inherit; font-size: 1.3rem; }
+.search-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
+.search-tags button { padding: 0.5rem 0.75rem; border: 1px solid #dededb; border-radius: 999px; background: transparent; color: var(--cinza-texto); font-size: 1.1rem; }
+.search-tags button { border-color: #2c3e50; background: #2c3e50; color: #fff; }
+.search-tags button:hover,
+.search-tags button.selecionado { border-color: var(--azul-acao); background: var(--azul-acao); color: #fff; }
+.search-results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.search-result { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; }
+.search-result h3 { margin: 0.25rem 0; }
+.search-result p:last-child { margin: 0; color: var(--cinza-texto); font-size: 1.15rem; }
+.search-result > :last-child { color: var(--azul-acao); font-size: 1.4rem; }
+
+.group-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 2rem; }
+.group-cover { display: grid; aspect-ratio: 2 / 1; place-items: center; margin: -1.8rem -1.8rem 1.25rem; border-radius: var(--raio-card) var(--raio-card) 0 0; color: #fff; font-size: 3rem; }
+.group-card h3 { margin-top: 0.25rem; }
+.group-card a { margin-top: 0.4rem; }
+
+.account-card { display: flex; align-items: center; gap: 1.2rem; max-width: 780px; }
+.account-card > div:nth-child(2) { flex: 1; }
+.account-card h3 { margin: 0.25rem 0; }
+.account-card p:last-child { color: var(--cinza-texto); }
+.account-avatar { display: grid; width: 56px; height: 56px; flex: 0 0 56px; place-items: center; border-radius: 50%; background: var(--amarelo-figma); color: var(--preto); font-size: 1.5rem; }
+
+.form-footnote { margin-top: 1rem; color: var(--cinza-texto); font-size: 1.15rem; text-align: center; }
+.form-footnote a { color: var(--azul-acao); font-weight: 700; text-decoration: none; }
+.form-footnote a:hover { text-decoration: underline; }
+.recovery-card h2 { margin: 0.35rem 0 0.8rem; }
+.recovery-card .lead-copy { margin-bottom: 1.25rem; font-size: 1.2rem; }
+.aviso-capslock { display: block; margin-top: 0.35rem; color: #a33a3a; font-size: 1.1rem; font-weight: 700; }
+.aviso-capslock[hidden] { display: none; }
+body[data-tela-login] .aviso-capslock { font-size: 1.23rem; }
+body.modo-noturno .aviso-capslock { color: #ffb0a8; }
+
+body.modo-noturno .search-input { border-color: #4b4b45; }
+body.modo-noturno .search-tags button { border-color: #4b4b45; }
+body.modo-noturno .search-tags button.selecionado { background: #203d4b; }
+body.modo-noturno .sidebar-tools button[aria-pressed="true"] i::after { right: 17px; }
+
+/* ---------- Agenda ---------- */
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.agenda-card { margin-top: 0; position: relative; }
+.agenda-card h3 { margin-bottom: 0.65rem; }
+.agenda-data { margin-bottom: 0.45rem; color: var(--cinza-texto); font-weight: 700; }
+.agenda-status { display: inline-block; margin-top: 1rem; padding: 0.25rem 0.55rem; border-radius: 999px; font-size: 1.1rem; font-weight: 700; }
+.status-agendada { background: #e5f3e8; color: #1e6a2d; }
+.status-realizada { background: #e8eef8; color: #315781; }
+.status-cancelada { background: #f8e6e6; color: #8d3131; }
+.agenda-cancelada { opacity: 0.78; }
+.agenda-acoes { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.agenda-form-card, .grupo-agenda-card, .agenda-filtros { margin-top: 1rem; }
+.agenda-filtros .campo-duplo { margin-bottom: 0.5rem; }
+.grupo-agenda-card .campo-com-botao { align-items: stretch; flex-wrap: wrap; }
+.grupo-agenda-card .campo-com-botao input,
+.grupo-agenda-card .campo-com-botao select { min-width: 180px; flex: 1 1 180px; }
+.agenda-grid .empty-state { grid-column: 1 / -1; }
+
+/* ---------- Frequência (RF05) ---------- */
+.page-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.frequencia-resumo-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.frequencia-resumo-card { margin-top: 0; }
+.frequencia-resumo-card h3 { margin: 0.3rem 0 1rem; }
+.frequencia-numeros { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+.frequencia-numeros div { display: flex; flex-direction: column; gap: 0.15rem; }
+.frequencia-numeros strong { font-size: 1.75rem; }
+.frequencia-numeros span { color: var(--cinza-texto); font-size: 1.15rem; }
+.frequencia-detalhe { border-top: 1px solid #e2e2e2; padding-top: 0.7rem; font-size: 1.15rem; }
+.frequencia-detalhe summary { color: var(--azul-acao); cursor: pointer; font-weight: 700; }
+.frequencia-detalhe p { color: var(--cinza-texto); margin: 0.65rem 0 0; }
+.frequencia-registros { margin-top: 1.5rem; }
+.frequencia-lista { display: grid; gap: 0.65rem; margin-top: 1rem; }
+.frequencia-registro-item { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid #e2e2e2; }
+.frequencia-registro-item p { margin: 0.3rem 0 0; color: var(--cinza-texto); font-size: 1.15rem; }
+.status-pendente { background: #fff8df; color: #6b4c00; }
+.status-presente { background: #e5f3e8; color: #1e6a2d; }
+.status-falta { background: #f8e6e6; color: #8d3131; }
+.lista-chamada { list-style: none; margin: 1rem 0; }
+.lista-chamada li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; padding: 0.6rem 0; border-bottom: 1px solid #e2e2e2; }
+.opcoes-presenca { display: flex; gap: 0.75rem; }
+.opcoes-presenca label { display: flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.5rem; cursor: pointer; }
+.chamada-card button:disabled { opacity: 0.5; cursor: not-allowed; }
+body.modo-noturno .frequencia-detalhe,
+body.modo-noturno .frequencia-registro-item,
+body.modo-noturno .lista-chamada li { border-color: #4b4b45; }
+body.modo-noturno .status-pendente { background: #4b3c14; color: #ffe9a3; }
+body.modo-noturno .status-presente { background: #1e4b2a; color: #b7edbf; }
+body.modo-noturno .status-falta { background: #542626; color: #ffb0a8; }
+
+@media (max-width: 900px) {
+  .public-highlights, .student-class-grid, .group-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .search-results { grid-template-columns: 1fr; }
+  .agenda-grid { grid-template-columns: 1fr; }
+  .frequencia-resumo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .public-page-tools, .public-login-note, .account-card { align-items: flex-start; flex-direction: column; }
+  .public-actions { width: 100%; }
+  .public-actions .page-cta { flex: 1; justify-content: center; }
+  .choice-grid, .contact-grid, .public-highlights, .student-class-grid, .group-grid { grid-template-columns: 1fr; }
+  .group-cover { margin-left: -1.1rem; margin-right: -1.1rem; margin-top: -1.1rem; }
+  .frequencia-resumo-grid { grid-template-columns: 1fr; }
+  .frequencia-registro-item { align-items: flex-start; flex-direction: column; }
+}
+
+/* ---------- Audios de pratica (RF08) ---------- */
+
+/* Lista de cartoes, e nao tabela: um player de audio numa celula com nowrap
+   fica espremido no celular (RNF04). Aqui cada gravacao ocupa a largura toda. */
+.lista-audios {
+  list-style: none;
+  margin-top: 0.75rem;
+}
+
+.lista-audios > li {
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.item-audio {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* Nome de arquivo pode vir sem espaco nenhum; sem isto ele estoura o cartao. */
+.item-audio strong {
+  overflow-wrap: anywhere;
+}
+
+.item-audio-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.item-audio audio {
+  width: 100%;
+}
+
+/* A tela de Arquivos nasceu antes do modo noturno: sem isto, cada gravacao
+   continuaria num cartao branco sobre o fundo escuro. Mesma cor do .cartao. */
+body.modo-noturno .lista-audios > li {
+  background: #242421;
+  color: #f5f3ed;
+}
+
+/* ---------- Chamada (RF05) ---------- */
+
+.chamada-card { margin-top: 1.5rem; }
+
+/* "Sem chamada" em amarelo, e nao no verde de "Agendada": verde passa a ideia
+   de que esta tudo certo, e aqui falta alguma coisa. Mesmas cores do .aviso. */
+.status-pendente { background: #fff8df; color: #6b4c00; }
+
+/* Lista propria, e nao a .lista-alunos: aquela tem fundo branco fixo e, no
+   modo noturno, o texto claro do cartao some em cima dele. */
+.lista-chamada {
+  list-style: none;
+  margin: 1rem 0;
+}
+
+.lista-chamada li {
+  display: flex;
+  /* no celular, as opcoes descem para baixo do nome em vez de espremer */
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.opcoes-presenca {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* O rotulo inteiro e clicavel, com folga em volta: no celular (RNF04) o
+   circulo do radio sozinho e pequeno demais para o dedo. */
+.opcoes-presenca label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  cursor: pointer;
+}
+
+/* Aula que ainda nao comecou: o botao fica na tela, mas precisa parecer
+   desligado - sem isto, a pessoa clica e nada acontece. */
+.chamada-card button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+body.modo-noturno .lista-chamada li { border-bottom-color: #4b4b45; }
+
+/* ---------- Minhas presencas (RF05, tela Classes do aluno) ---------- */
+
+/* A lista reaproveita a .lista-chamada: mesma linha com o nome a esquerda e a
+   situacao a direita, que desce no celular, e ja com o ajuste do modo noturno. */
+.presencas-card { margin-top: 2rem; }
+.resumo-presencas { font-weight: 700; }
+.presenca-data { color: var(--cinza-texto); font-size: 0.9rem; }
+
+/* A etiqueta da agenda tem margem em cima, pensada para o fim de um cartao.
+   Aqui ela fica ao lado do nome, e a margem a desalinharia. */
+.lista-chamada .agenda-status { margin-top: 0; }
+
+/* Mesmas cores de "Agendada" e "Cancelada": verde para o que esta em dia,
+   vermelho para o que faltou. */
+.status-presente { background: #e5f3e8; color: #1e6a2d; }
+.status-falta { background: #f8e6e6; color: #8d3131; }
+
+/* ---------- Notificacoes (RF09) ---------- */
+
+/* O contador vai no fim do link da barra lateral. margin-left: auto empurra o
+   numero para a direita, longe do texto, como nos aplicativos de mensagem. */
+.contador-notificacoes {
+  margin-left: auto;
+  min-width: 1.4rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: #a33a3a;
+  color: #fff;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.lista-notificacoes {
+  list-style: none;
+}
+
+.lista-notificacoes li {
+  padding: 0.75rem 0 0.75rem 0.75rem;
+  border-bottom: 1px solid #e2e2e2;
+  /* A borda da esquerda existe em todas, transparente nas lidas: assim a nova
+     se destaca sem empurrar o texto para o lado. */
+  border-left: 4px solid transparent;
+}
+
+.lista-notificacoes li.notificacao-nova {
+  border-left-color: var(--azul-acao);
+  font-weight: 700;
+}
+
+.notificacao-data {
+  color: var(--cinza-texto);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+body.modo-noturno .lista-notificacoes li { border-bottom-color: #4b4b45; }

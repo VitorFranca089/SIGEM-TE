@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turmas - SIGEM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="sidebar">
+    <h1>SIGEM</h1><p class="sidebar-heading">Descubra</p>
+    <nav class="sidebar-nav"><a href="index.html"><span>⌂</span>Início</a><a href="pesquisa.html"><span>⌕</span>Pesquisa</a><a href="contatos.html"><span>◉</span>Contatos docentes</a></nav>
+    <p class="sidebar-heading">Área acadêmica</p>
+    <nav class="sidebar-nav"><a href="classes.html" class="ativo"><span>☷</span>Classes</a><a href="agenda.html"><span>▦</span>Agenda</a><a href="grupos.html"><span>♫</span>Grupos</a></nav>
+    <div class="sidebar-tools"><a href="conta.html"><span>⚙</span>Sua conta</a><button type="button" data-theme-toggle="dark" aria-pressed="false"><span>◐</span>Modo noturno <i></i></button><button type="button" data-theme-toggle="contrast" aria-pressed="false"><span>☼</span>Alto contraste</button></div>
+  </header>
+
+  <main>
+    <div class="page-tools"><div class="view-switch"><button class="selecionado">Turmas</button><button>Solicitações</button></div><a class="page-cta" href="#formulario-turma">Nova turma <span>＋</span></a></div>
+    <h2>Turmas</h2>
+    <p id="aviso-permissao" class="aviso" hidden></p>
+
+    <section class="cartao" id="cartao-turma">
+      <h3 id="titulo-formulario">Cadastrar turma</h3>
+      <p id="ajuda-formulario" class="ajuda"></p>
+      <form id="formulario-turma">
+        <input type="hidden" id="turma-id">
+        <div class="campo-duplo">
+          <div class="campo">
+            <label for="curso-id">Curso</label>
+            <select id="curso-id" required></select>
+          </div>
+          <div class="campo" id="campo-professor">
+            <label for="professor-id">Professor</label>
+            <select id="professor-id" required></select>
+          </div>
+        </div>
+        <div class="campo">
+          <label for="nome">Nome da turma</label>
+          <input type="text" id="nome" maxlength="150" minlength="2" required>
+        </div>
+        <div class="campo">
+          <label for="capa-url">Imagem da capa (URL externa)</label>
+          <input type="url" id="capa-url" maxlength="1000" placeholder="https://exemplo.com/imagem.jpg">
+          <small class="ajuda">Você pode usar uma imagem hospedada em qualquer site.</small>
+        </div>
+        <div class="campo">
+          <label for="capa-arquivo">Ou carregue uma imagem do dispositivo</label>
+          <input type="file" id="capa-arquivo" accept="image/jpeg,image/png,image/webp">
+          <small class="ajuda">JPG, PNG ou WebP, até 5 MB. O arquivo enviado substitui a URL.</small>
+        </div>
+        <div id="capa-editor" class="capa-editor" hidden>
+          <div class="capa-editor-preview" id="capa-preview"><img id="capa-preview-imagem" alt="Prévia do enquadramento da capa"></div>
+          <div class="capa-ajustes">
+            <div class="campo">
+              <label for="capa-pos-x">Horizontal <output id="capa-pos-x-valor">50%</output></label>
+              <input type="range" id="capa-pos-x" min="0" max="100" value="50">
+            </div>
+            <div class="campo">
+              <label for="capa-pos-y">Vertical <output id="capa-pos-y-valor">50%</output></label>
+              <input type="range" id="capa-pos-y" min="0" max="100" value="50">
+            </div>
+            <div class="campo">
+              <label for="capa-zoom">Zoom <output id="capa-zoom-valor">1×</output></label>
+              <input type="range" id="capa-zoom" min="1" max="3" step="0.05" value="1">
+            </div>
+          </div>
+          <small class="ajuda">Use a prévia para escolher qual parte da imagem ficará visível.</small>
+        </div>
+        <div class="campo-duplo">
+          <div class="campo">
+            <label for="dia-semana">Dia da semana</label>
+            <select id="dia-semana" required></select>
+          </div>
+          <div class="campo-duplo campo-horario">
+            <div class="campo"><label for="hora-inicio">Início</label><input type="time" id="hora-inicio" required></div>
+            <div class="campo"><label for="hora-fim">Fim</label><input type="time" id="hora-fim" required></div>
+          </div>
+        </div>
+        <div class="campo" id="campo-status">
+          <label for="status">Status</label>
+          <select id="status">
+            <option value="solicitada">Solicitada</option>
+            <option value="ativa">Aprovada / ativa</option>
+            <option value="recusada">Recusada</option>
+            <option value="encerrada">Encerrada</option>
+          </select>
+        </div>
+        <button type="submit">Salvar</button>
+        <button type="button" id="botao-cancelar" class="secundario" hidden>Cancelar</button>
+      </form>
+      <p id="mensagem" class="mensagem"></p>
+    </section>
+
+    <div class="tabela-wrapper">
+      <table>
+        <thead><tr><th>Turma</th><th>Curso</th><th>Professor</th><th>Horário</th><th>Status</th><th>Alunos</th><th>Ações</th></tr></thead>
+        <tbody id="corpo-tabela"></tbody>
+      </table>
+    </div>
+
+    <section class="cartao" id="cartao-alunos" hidden>
+      <h3 id="titulo-alunos">Alunos da turma</h3>
+      <div class="campo-com-botao" id="campo-matricula">
+        <select id="aluno-matricula"></select>
+        <button type="button" id="botao-adicionar-aluno">Adicionar</button>
+      </div>
+      <ul id="lista-alunos" class="lista-alunos"></ul>
+      <p id="mensagem-alunos" class="mensagem"></p>
+    </section>
+  </main>
+
+  <script src="js/sessao.js"></script>
+  <script src="js/turmas.js"></script>
+  <script src="js/rodape.js"></script>
+</body>
+</html>

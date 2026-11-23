@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arquivos - SIGEM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- O link "Arquivos" desta barra nao esta escrito aqui: ele entra pela secao
+       "Gestao", que o sessao.js monta de acordo com o perfil de quem esta logado. -->
+  <header class="sidebar">
+    <h1>SIGEM</h1><p class="sidebar-heading">Descubra</p>
+    <nav class="sidebar-nav"><a href="index.html"><span>⌂</span>Início</a><a href="pesquisa.html"><span>⌕</span>Pesquisa</a><a href="contatos.html"><span>◉</span>Contatos docentes</a></nav>
+    <p class="sidebar-heading">Área acadêmica</p>
+    <nav class="sidebar-nav"><a href="classes.html"><span>☷</span>Classes</a><a href="grupos.html"><span>♫</span>Grupos</a></nav>
+    <div class="sidebar-tools"><a href="conta.html"><span>⚙</span>Sua conta</a><button type="button" data-theme-toggle="dark" aria-pressed="false"><span>◐</span>Modo noturno <i></i></button><button type="button" data-theme-toggle="contrast" aria-pressed="false"><span>☼</span>Alto contraste</button></div>
+  </header>
+
+  <main>
+    <h2>Arquivos</h2>
+
+    <!-- Todas as secoes nascem escondidas: quem decide qual aparece e o
+         arquivos.js, pelo perfil de quem esta logado.
+
+         Os materiais do professor (RF07) vem antes das gravacoes (RF08): o
+         aluno chega aqui para pegar o que o professor mandou, pratica, e so
+         depois envia a gravacao. Cada formulario fica colado na lista que ele
+         alimenta, com a mensagem entre os dois. -->
+
+    <section class="cartao" id="bloco-sem-login" hidden>
+      <p>Para enviar ou ouvir arquivos, <a href="login.html">entre no sistema</a>.</p>
+    </section>
+
+    <!-- RF07: so para professor e administrador -->
+    <section class="cartao" id="bloco-envio-material" hidden>
+      <h3>Enviar material</h3>
+      <form id="formulario-material">
+        <div class="campo">
+          <label for="arquivo-material">Arquivo</label>
+          <input type="file" id="arquivo-material" accept=".mp3,.m4a,.ogg,.opus,.wav,.pdf" required>
+          <small class="ajuda">MP3, M4A, OGG, WAV ou PDF, até 50 MB.</small>
+        </div>
+
+        <!-- Uma pergunta de cada vez: primeiro "para quem", depois a lista
+             daquele tipo. Com as duas listas na tela, daria para escolher uma
+             turma E um aluno, e o servidor recusaria (RN23). A classe vem da
+             tela de chamada, que ja deixa o rotulo inteiro clicavel no celular. -->
+        <p id="rotulo-destino"><strong>Enviar para</strong></p>
+        <div class="opcoes-presenca" role="radiogroup" aria-labelledby="rotulo-destino">
+          <label><input type="radio" name="destino" value="turma" checked> Uma turma</label>
+          <label><input type="radio" name="destino" value="aluno"> Um aluno</label>
+        </div>
+
+        <!-- O hidden fica num div sem classe porque o display: flex do .campo
+             venceria o atributo, e a lista escondida continuaria na tela. -->
+        <div id="destino-turma">
+          <div class="campo">
+            <label for="escolha-turma">Turma</label>
+            <select id="escolha-turma" required>
+              <option value="">Escolha uma turma</option>
+            </select>
+          </div>
+        </div>
+        <div id="destino-aluno" hidden>
+          <div class="campo">
+            <label for="escolha-aluno-destino">Aluno</label>
+            <select id="escolha-aluno-destino" required disabled>
+              <option value="">Escolha um aluno</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" id="botao-enviar-material">Enviar</button>
+      </form>
+    </section>
+
+    <p id="mensagem-materiais" class="mensagem"></p>
+
+    <!-- RF07: os tres perfis. O que cada um ve e decidido no servidor. -->
+    <section id="bloco-materiais" hidden>
+      <h3 id="titulo-materiais">Materiais</h3>
+      <ul id="lista-materiais" class="lista-audios"></ul>
+    </section>
+
+    <!-- So para o aluno (RF08) -->
+    <section class="cartao" id="bloco-envio" hidden>
+      <h3>Enviar gravação</h3>
+      <form id="formulario-envio">
+        <div class="campo">
+          <label for="arquivo-audio">Arquivo de áudio</label>
+          <!-- accept filtra a janela de escolha do arquivo. E conforto: quem
+               recusa formato errado de verdade e o servidor. -->
+          <input type="file" id="arquivo-audio" accept=".mp3,.m4a,.ogg,.opus,.wav" required>
+          <small class="ajuda">MP3, M4A, OGG ou WAV, até 50 MB.</small>
+        </div>
+        <button type="submit" id="botao-enviar">Enviar</button>
+      </form>
+    </section>
+
+    <!-- So para professor e administrador -->
+    <section class="cartao" id="bloco-escolha" hidden>
+      <h3>Práticas dos alunos</h3>
+      <div class="campo">
+        <label for="escolha-aluno">Aluno</label>
+        <select id="escolha-aluno">
+          <option value="">Escolha um aluno</option>
+        </select>
+      </div>
+    </section>
+
+    <p id="mensagem" class="mensagem"></p>
+
+    <section id="bloco-lista" hidden>
+      <h3 id="titulo-lista">Minhas gravações</h3>
+      <ul id="lista-audios" class="lista-audios"></ul>
+    </section>
+  </main>
+
+  <!-- sessao.js vem ANTES aqui (nas outras telas vem depois): esta tela usa o
+       Sessao logo ao carregar, para saber o perfil e escolher o que mostrar. -->
+  <script src="js/sessao.js"></script>
+  <script src="js/arquivos.js"></script>
+  <script src="js/rodape.js"></script>
+</body>
+</html>

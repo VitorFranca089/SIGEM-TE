@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notificações - SIGEM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- O link "Notificações" desta barra entra pela secao "Gestão", que o
+       sessao.js monta de acordo com o perfil de quem esta logado. -->
+  <header class="sidebar">
+    <h1>SIGEM</h1><p class="sidebar-heading">Descubra</p>
+    <nav class="sidebar-nav"><a href="index.html"><span>⌂</span>Início</a><a href="pesquisa.html"><span>⌕</span>Pesquisa</a><a href="contatos.html"><span>◉</span>Contatos docentes</a></nav>
+    <p class="sidebar-heading">Área acadêmica</p>
+    <nav class="sidebar-nav"><a href="classes.html"><span>☷</span>Classes</a><a href="grupos.html"><span>♫</span>Grupos</a></nav>
+    <div class="sidebar-tools"><a href="conta.html"><span>⚙</span>Sua conta</a><button type="button" data-theme-toggle="dark" aria-pressed="false"><span>◐</span>Modo noturno <i></i></button><button type="button" data-theme-toggle="contrast" aria-pressed="false"><span>☼</span>Alto contraste</button></div>
+  </header>
+
+  <main>
+    <div class="page-tools"><div><p class="overline">Comunicação</p><h2>Notificações</h2></div></div>
+    <p id="aviso-notificacoes" class="aviso" hidden></p>
+    <section class="cartao" id="bloco-notificacoes" hidden>
+      <ul id="lista-notificacoes" class="lista-notificacoes"></ul>
+    </section>
+    <p id="mensagem" class="mensagem"></p>
+  </main>
+
+  <script src="js/sessao.js"></script><script src="js/notificacoes.js"></script><script src="js/rodape.js"></script>
+</body>
+</html>

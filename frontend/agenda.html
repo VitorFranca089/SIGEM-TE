@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda - SIGEM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="sidebar">
+    <h1>SIGEM</h1><p class="sidebar-heading">Área acadêmica</p>
+    <nav class="sidebar-nav">
+      <a href="index.html"><span>⌂</span>Início</a>
+      <a href="pesquisa.html"><span>⌕</span>Pesquisa</a>
+      <a href="contatos.html"><span>◉</span>Contatos docentes</a>
+    </nav>
+    <p class="sidebar-heading">Organização</p>
+    <nav class="sidebar-nav">
+      <a href="classes.html"><span>☷</span>Classes</a>
+      <a href="agenda.html" class="ativo"><span>◷</span>Agenda</a>
+      <a href="grupos.html"><span>♫</span>Grupos</a>
+    </nav>
+    <div class="sidebar-tools">
+      <a href="conta.html"><span>⚙</span>Sua conta</a>
+      <button type="button" data-theme-toggle="dark" aria-pressed="false"><span>◐</span>Modo noturno <i></i></button>
+      <button type="button" data-theme-toggle="contrast" aria-pressed="false"><span>☼</span>Alto contraste</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-tools">
+      <div><p class="overline">Compromissos</p><h2>Agenda de aulas</h2></div>
+      <a class="page-cta" href="classes.html">Minhas classes <span>→</span></a>
+    </div>
+    <p class="lead-copy">Acompanhe aulas regulares e encontros extracurriculares de grupos.</p>
+    <p id="aviso-permissao" class="aviso" hidden></p>
+
+    <section id="cartao-formulario" class="cartao agenda-form-card" hidden>
+      <div class="section-heading"><div><p class="overline">Novo compromisso</p><h3 id="titulo-formulario">Agendar aula</h3></div></div>
+      <form id="formulario-aula">
+        <input type="hidden" id="aula-id">
+        <div class="campo-duplo">
+          <div class="campo">
+            <label for="tipo-aula">Tipo</label>
+            <select id="tipo-aula" required>
+              <option value="turma">Aula de turma</option>
+              <option value="grupo">Encontro extracurricular de grupo</option>
+            </select>
+          </div>
+          <div class="campo" id="campo-turma">
+            <label for="turma-id">Turma</label>
+            <select id="turma-id"></select>
+          </div>
+          <div class="campo" id="campo-grupo" hidden>
+            <label for="grupo-id">Grupo</label>
+            <select id="grupo-id"></select>
+          </div>
+        </div>
+        <div class="campo-duplo">
+          <div class="campo"><label for="data">Data</label><input id="data" type="date" required></div>
+          <div class="campo"><label for="observacoes">Observações</label><input id="observacoes" maxlength="2000" placeholder="Opcional"></div>
+        </div>
+        <div class="campo-duplo campo-horario">
+          <div class="campo"><label for="hora-inicio">Início</label><input id="hora-inicio" type="time" required></div>
+          <div class="campo"><label for="hora-fim">Fim</label><input id="hora-fim" type="time" required></div>
+        </div>
+        <small id="ajuda-horario" class="ajuda">A turma preenche o horário semanal automaticamente. Você pode ajustá-lo para uma reposição.</small>
+        <button type="submit" id="botao-salvar">Agendar aula</button>
+        <button type="button" id="botao-cancelar-edicao" class="secundario" hidden>Cancelar edição</button>
+      </form>
+      <p id="mensagem-formulario" class="mensagem"></p>
+    </section>
+
+    <section id="cartao-grupo" class="cartao grupo-agenda-card" hidden>
+      <div class="section-heading"><div><p class="overline">Participação opcional</p><h3>Grupos extracurriculares</h3></div></div>
+      <form id="formulario-grupo" class="campo-com-botao">
+        <input id="grupo-nome" type="text" maxlength="150" minlength="2" placeholder="Nome do novo grupo" required>
+        <input id="grupo-descricao" type="text" maxlength="2000" placeholder="Descrição opcional">
+        <button type="submit">Criar grupo</button>
+      </form>
+      <div id="painel-membros" hidden>
+        <p class="ajuda">Selecione um grupo na agenda para administrar seus participantes.</p>
+        <div class="campo-com-botao"><select id="aluno-grupo"></select><button type="button" id="botao-adicionar-membro">Adicionar aluno</button></div>
+        <ul id="lista-membros" class="lista-alunos"></ul>
+        <p id="mensagem-grupo" class="mensagem"></p>
+      </div>
+    </section>
+
+    <section class="cartao agenda-filtros">
+      <div class="campo-duplo">
+        <div class="campo"><label for="filtro-inicio">A partir de</label><input id="filtro-inicio" type="date"></div>
+        <div class="campo"><label for="filtro-fim">Até</label><input id="filtro-fim" type="date"></div>
+      </div>
+      <button type="button" id="botao-filtrar">Atualizar agenda</button>
+    </section>
+
+    <section id="lista-agenda" class="agenda-grid"></section>
+    <p id="mensagem-agenda" class="mensagem"></p>
+  </main>
+
+  <script src="js/sessao.js"></script>
+  <script src="js/agenda.js"></script>
+  <script src="js/rodape.js"></script>
+</body>
+</html>

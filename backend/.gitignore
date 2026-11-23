@@ -1,0 +1,6 @@
+node_modules/
+.env
+npm-debug.log
+# Audios e arquivos enviados pelos usuarios (RF07/RF08). Sao dados, nao codigo:
+# cada maquina tem os seus, assim como tem o proprio banco.
+uploads/

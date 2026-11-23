@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperar senha - SIGEM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-tela-login data-ocultar-sessao>
+  <header class="sidebar"><h1>SIGEM</h1><p class="sidebar-heading">Recuperação de senha</p><p class="sidebar-copy">Vamos enviar um código de uso único para o seu e-mail.</p></header>
+  <main class="form-main"><section class="cartao cartao-login recovery-card"><p class="overline">Acesso seguro</p><h2>Esqueceu sua senha?</h2><p class="lead-copy">Informe o e-mail da sua conta. Se ele estiver cadastrado, você receberá um código válido por 15 minutos.</p><form id="formulario-recuperar"><div class="campo"><label for="email">E-mail</label><input id="email" type="email" maxlength="150" autocomplete="email" required autofocus></div><button type="submit">Enviar código</button></form><p id="mensagem" class="mensagem"></p><p class="form-footnote"><a href="redefinir-senha.html">Já recebeu um código?</a> · <a href="login.html">Voltar ao login</a></p></section></main>
+  <script src="js/sessao.js"></script><script src="js/recuperar.js"></script><script src="js/rodape.js"></script>
+</body>
+</html>

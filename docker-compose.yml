@@ -1,0 +1,29 @@
+# Banco PostgreSQL do SIGEM em Docker.
+# Na primeira subida, o schema.sql e aplicado automaticamente.
+# Subir:   docker compose up -d
+# Parar:   docker compose down        (os dados ficam no volume)
+# Zerar:   docker compose down -v     (APAGA os dados)
+name: sigem
+
+services:
+  db:
+    image: postgres:16
+    container_name: sigem-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sigem_dev_123
+      POSTGRES_DB: sigem_db
+    ports:
+      - "127.0.0.1:5433:5432"   # porta 5433 na sua maquina, so acessivel localmente
+    volumes:
+      - sigem_pgdata:/var/lib/postgresql/data
+      - ./backend/src/config/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d sigem_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  sigem_pgdata:

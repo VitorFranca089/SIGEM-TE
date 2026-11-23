@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar - SIGEM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<!-- data-tela-login avisa o sessao.js para nao desenhar a barra "Entrar" aqui:
+     ja estamos na tela de entrar. -->
+<body data-tela-login>
+  <header class="sidebar">
+    <h1>SIGEM</h1><p class="sidebar-heading">Bem-vindo</p>
+    <p class="sidebar-copy">Sua jornada musical começa aqui.</p>
+  </header>
+
+  <main>
+    <section class="cartao cartao-login">
+      <h3>Entrar no sistema</h3>
+
+      <form id="formulario-login">
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <!-- autocomplete ajuda o navegador a oferecer o e-mail salvo;
+               autofocus deixa o cursor pronto no campo ao abrir a tela -->
+          <input type="email" id="email" maxlength="150" autocomplete="username" required autofocus>
+        </div>
+
+        <div class="campo">
+          <label for="senha">Senha</label>
+          <div class="campo-com-botao">
+            <input type="password" id="senha" autocomplete="current-password" required>
+            <button type="button" id="botao-ver-senha" class="secundario">Mostrar</button>
+          </div>
+        </div>
+
+        <button type="submit" id="botao-entrar">Entrar</button>
+      </form>
+
+      <p id="mensagem" class="mensagem"></p>
+      <p class="form-footnote">Ainda não tem acesso? <a href="cadastro.html">Crie um cadastro</a></p>
+      <p class="form-footnote"><a href="recuperar-senha.html">Esqueci minha senha</a></p>
+    </section>
+  </main>
+
+  <script src="js/sessao.js"></script>
+  <script src="js/login.js"></script>
+  <script src="js/senha-ui.js"></script>
+  <script src="js/rodape.js"></script>
+</body>
+</html>

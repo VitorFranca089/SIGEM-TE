@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redefinir senha - SIGEM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-tela-login data-ocultar-sessao>
+  <header class="sidebar"><h1>SIGEM</h1><p class="sidebar-heading">Nova senha</p><p class="sidebar-copy">Use o código que recebeu por e-mail para criar uma nova senha.</p></header>
+  <main class="form-main"><section class="cartao cartao-login recovery-card"><p class="overline">Código temporário</p><h2>Crie uma nova senha</h2><form id="formulario-redefinir"><div class="campo"><label for="email">E-mail</label><input id="email" type="email" maxlength="150" autocomplete="email" required></div><div class="campo"><label for="codigo">Código recebido</label><input id="codigo" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></div><div class="campo"><label for="nova-senha">Nova senha</label><div class="campo-com-botao"><input id="nova-senha" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}" title="Use pelo menos 8 caracteres, uma letra maiúscula, uma minúscula, um número e um caractere especial." autocomplete="new-password" required><button type="button" id="mostrar-senha" class="secundario">Mostrar</button></div><small class="ajuda">Mínimo de 8 caracteres, com maiúscula, minúscula, número e caractere especial.</small></div><div class="campo"><label for="confirmacao-senha">Confirme a nova senha</label><input id="confirmacao-senha" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}" title="Repita uma senha com maiúscula, minúscula, número e caractere especial." autocomplete="new-password" required></div><button type="submit">Redefinir senha</button></form><p id="mensagem" class="mensagem"></p><p class="form-footnote"><a href="recuperar-senha.html">Solicitar outro código</a> · <a href="login.html">Voltar ao login</a></p></section></main>
+  <script src="js/sessao.js"></script><script src="js/redefinir.js"></script><script src="js/senha-ui.js"></script><script src="js/rodape.js"></script>
+</body>
+</html>

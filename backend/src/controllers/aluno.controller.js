@@ -1,0 +1,258 @@
+// Controller de alunos (RF01): cadastro, edicao, consulta e exclusao.
+//
+// Um aluno vive em duas tabelas: "usuario" (nome, email, senha, perfil, ativo) e
+// "aluno" (data_nascimento). Por isso cadastrar e editar usam transacao - se a
+// segunda escrita falhar, a primeira precisa ser desfeita, senao sobra um usuario
+// orfao no banco.
+
+const bcrypt = require('bcrypt');
+const pool = require('../config/db');
+const { validarCadastro, validarConfirmacaoSenha } = require('../utils/validacao');
+
+// Custo do hash: quantas rodadas de embaralhamento o bcrypt aplica na senha.
+// 10 e o padrao recomendado - alto o bastante para atrapalhar quem tenta
+// adivinhar, baixo o bastante para o cadastro nao demorar.
+const CUSTO_HASH = 10;
+
+// As colunas devolvidas em toda consulta. Listadas uma a uma de proposito:
+// "SELECT *" traria senha_hash junto, e hash de senha nunca sai da API.
+// A data vira texto no proprio SQL para nao passar por Date do JavaScript, que
+// desloca o dia conforme o fuso horario.
+const COLUNAS = `
+  a.id,
+  u.nome,
+  u.email,
+  TO_CHAR(a.data_nascimento, 'YYYY-MM-DD') AS data_nascimento
+`;
+
+// Codigo do PostgreSQL para violacao de restricao UNIQUE (email repetido).
+const EMAIL_DUPLICADO = '23505';
+
+// O email fica reservado mesmo depois da exclusao logica: a linha continua no
+// banco, entao o UNIQUE continua valendo. Sem esta mensagem, quem cadastra ve
+// "ja existe" com a lista de alunos vazia na frente e nao entende o motivo.
+async function mensagemDeEmailDuplicado(email) {
+  const existente = await pool.query(
+    'SELECT ativo FROM usuario WHERE email = $1',
+    [email.trim().toLowerCase()]
+  );
+  if (existente.rows.length > 0 && existente.rows[0].ativo === false) {
+    return 'Esse e-mail pertence a um cadastro que foi excluído. Escolha outro e-mail.';
+  }
+  return 'Já existe um usuário com esse email';
+}
+
+function erro(res, status, message, detalhe) {
+  return res.status(status).json({ status: 'erro', message, detalhe });
+}
+
+// GET /api/alunos -> lista os alunos ativos
+async function listar(req, res) {
+  try {
+    const parametros = [];
+    let filtro = '';
+    if (req.usuario.perfil === 'professor') {
+      parametros.push(req.usuario.id);
+      filtro = `
+        AND EXISTS (
+          SELECT 1
+          FROM professor p
+          JOIN usuario up ON up.id = p.usuario_id AND up.ativo = true
+          JOIN turma t ON t.professor_id = p.id
+            AND t.ativo = true AND t.status = 'ativa'
+          JOIN matricula m ON m.turma_id = t.id AND m.aluno_id = a.id
+          WHERE p.usuario_id = $1
+        )`;
+    }
+    const resultado = await pool.query(`
+      SELECT ${COLUNAS}
+      FROM aluno a
+      JOIN usuario u ON u.id = a.usuario_id
+      WHERE u.ativo = true${filtro}
+      ORDER BY u.nome
+    `, parametros);
+    res.json({ status: 'ok', dados: resultado.rows });
+  } catch (e) {
+    erro(res, 500, 'Falha ao listar os alunos', e.message);
+  }
+}
+
+// GET /api/alunos/:id -> busca um aluno
+async function buscarPorId(req, res) {
+  try {
+    const parametros = [req.params.id];
+    let filtro = '';
+    if (req.usuario.perfil === 'professor') {
+      parametros.push(req.usuario.id);
+      filtro = `
+        AND EXISTS (
+          SELECT 1
+          FROM professor p
+          JOIN usuario up ON up.id = p.usuario_id AND up.ativo = true
+          JOIN turma t ON t.professor_id = p.id
+            AND t.ativo = true AND t.status = 'ativa'
+          JOIN matricula m ON m.turma_id = t.id AND m.aluno_id = a.id
+          WHERE p.usuario_id = $2
+        )`;
+    }
+    const resultado = await pool.query(`
+      SELECT ${COLUNAS}
+      FROM aluno a
+      JOIN usuario u ON u.id = a.usuario_id
+      WHERE a.id = $1 AND u.ativo = true${filtro}
+    `, parametros);
+
+    if (resultado.rows.length === 0) {
+      return erro(res, 404, 'Aluno não encontrado');
+    }
+    res.json({ status: 'ok', dados: resultado.rows[0] });
+  } catch (e) {
+    erro(res, 500, 'Falha ao buscar o aluno', e.message);
+  }
+}
+
+// GET /api/alunos/eu -> dados academicos do proprio aluno autenticado
+async function eu(req, res) {
+  try {
+    const resultado = await pool.query(`
+      SELECT ${COLUNAS}
+      FROM aluno a
+      JOIN usuario u ON u.id = a.usuario_id
+      WHERE a.usuario_id = $1 AND u.ativo = true
+    `, [req.usuario.id]);
+    if (resultado.rows.length === 0) return erro(res, 404, 'Cadastro de aluno não encontrado');
+    res.json({ status: 'ok', dados: resultado.rows[0] });
+  } catch (e) {
+    erro(res, 500, 'Falha ao buscar o cadastro do aluno');
+  }
+}
+
+// POST /api/alunos -> cadastra usuario + aluno
+async function criar(req, res) {
+  const { nome, email, senha, senha_confirmacao, data_nascimento } = req.body;
+
+  // Validado aqui, no servidor, e nao so no formulario: o HTML impede o usuario
+  // comum de errar, mas nao impede uma requisicao mandada direto na API.
+  const problemas = validarCadastro(
+    { nome, email, senha, dataNascimento: data_nascimento }
+  );
+  problemas.push(validarConfirmacaoSenha(senha, senha_confirmacao));
+  if (problemas.filter(Boolean).length > 0) {
+    const validos = problemas.filter(Boolean);
+    return erro(res, 400, validos[0], validos.join(' | '));
+  }
+
+  // client() em vez de pool.query() porque BEGIN/COMMIT precisam rodar todos na
+  // MESMA conexao. Com pool.query() cada comando poderia pegar uma conexao
+  // diferente e a transacao nao valeria de nada.
+  // Normaliza uma vez so e usa o mesmo valor no INSERT e na resposta, senao a
+  // API devolve um dado diferente do que foi gravado.
+  const nomeLimpo = nome.trim();
+  const emailLimpo = email.trim().toLowerCase();
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    const senhaHash = await bcrypt.hash(senha, CUSTO_HASH);
+    const usuario = await client.query(`
+      INSERT INTO usuario (nome, email, senha_hash, perfil)
+      VALUES ($1, $2, $3, 'aluno')
+      RETURNING id
+    `, [nomeLimpo, emailLimpo, senhaHash]);
+
+    const aluno = await client.query(`
+      INSERT INTO aluno (usuario_id, data_nascimento)
+      VALUES ($1, $2)
+      RETURNING id
+    `, [usuario.rows[0].id, data_nascimento || null]);
+
+    await client.query('COMMIT');
+    res.status(201).json({
+      status: 'ok',
+      dados: { id: aluno.rows[0].id, nome: nomeLimpo, email: emailLimpo, data_nascimento: data_nascimento || null }
+    });
+  } catch (e) {
+    await client.query('ROLLBACK');
+    if (e.code === EMAIL_DUPLICADO) {
+      return erro(res, 409, await mensagemDeEmailDuplicado(email));
+    }
+    erro(res, 500, 'Falha ao cadastrar o aluno', e.message);
+  } finally {
+    // devolve a conexao ao pool. Sem isso o pool esgota e a API trava.
+    client.release();
+  }
+}
+
+// PUT /api/alunos/:id -> edita nome, email e data de nascimento
+async function atualizar(req, res) {
+  const { nome, email, data_nascimento } = req.body;
+
+  // exigirSenha: false porque a edicao nao mexe em senha - trocar senha e RF06.
+  const problemas = validarCadastro(
+    { nome, email, dataNascimento: data_nascimento },
+    { exigirSenha: false }
+  );
+  if (problemas.length > 0) {
+    return erro(res, 400, problemas[0], problemas.join(' | '));
+  }
+
+  const nomeLimpo = nome.trim();
+  const emailLimpo = email.trim().toLowerCase();
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    // O subselect encontra o usuario dono deste aluno. O filtro por ativo evita
+    // "ressuscitar" pela edicao alguem que ja foi excluido.
+    const usuario = await client.query(`
+      UPDATE usuario SET nome = $1, email = $2
+      WHERE id = (SELECT usuario_id FROM aluno WHERE id = $3) AND ativo = true
+      RETURNING id
+    `, [nomeLimpo, emailLimpo, req.params.id]);
+
+    if (usuario.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return erro(res, 404, 'Aluno não encontrado');
+    }
+
+    await client.query(
+      'UPDATE aluno SET data_nascimento = $1 WHERE id = $2',
+      [data_nascimento || null, req.params.id]
+    );
+
+    await client.query('COMMIT');
+    res.json({ status: 'ok', dados: { id: Number(req.params.id), nome: nomeLimpo, email: emailLimpo, data_nascimento: data_nascimento || null } });
+  } catch (e) {
+    await client.query('ROLLBACK');
+    if (e.code === EMAIL_DUPLICADO) {
+      return erro(res, 409, await mensagemDeEmailDuplicado(email));
+    }
+    erro(res, 500, 'Falha ao atualizar o aluno', e.message);
+  } finally {
+    client.release();
+  }
+}
+
+// DELETE /api/alunos/:id -> exclusao logica
+// Nao apaga a linha: as chaves estrangeiras de matricula e frequencia impedem, e
+// apagar destruiria o historico academico. Marca como inativo, some das listas.
+async function excluir(req, res) {
+  try {
+    const resultado = await pool.query(`
+      UPDATE usuario SET ativo = false
+      WHERE id = (SELECT usuario_id FROM aluno WHERE id = $1) AND ativo = true
+      RETURNING id
+    `, [req.params.id]);
+
+    if (resultado.rows.length === 0) {
+      return erro(res, 404, 'Aluno não encontrado');
+    }
+    res.json({ status: 'ok', message: 'Aluno excluído' });
+  } catch (e) {
+    erro(res, 500, 'Falha ao excluir o aluno', e.message);
+  }
+}
+
+module.exports = { listar, buscarPorId, eu, criar, atualizar, excluir };
