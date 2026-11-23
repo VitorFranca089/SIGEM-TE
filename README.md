@@ -1,183 +1,169 @@
-# SIGEM - Sistema de Gestao para Escolas de Musica
+# SIGEM — Sistema de Gestão para Escolas de Música
 
-Esqueleto inicial do projeto, baseado na stack definida no TCC:
-Node.js + Express (backend), PostgreSQL (banco), HTML/CSS/JS puro (frontend).
+## Descrição do projeto
 
-## Estrutura de pastas
+O **SIGEM** é um sistema web para a gestão de escolas de música. Ele reúne em um
+só lugar o cadastro de alunos e professores, a organização de cursos e turmas, a
+agenda de aulas, a chamada (frequência) e a troca de arquivos entre professores e
+alunos, como partituras, materiais de apoio e gravações de prática.
 
+O sistema tem três perfis de acesso, cada um com as suas telas e permissões:
+
+- **Administrador:** gerencia alunos, professores, cursos e turmas, e aprova as
+  turmas solicitadas pelos professores.
+- **Professor:** agenda aulas, faz a chamada, envia materiais e acompanha as
+  práticas enviadas pelos alunos.
+- **Aluno:** consulta as aulas e a frequência, baixa materiais e envia gravações
+  de prática.
+
+### Funcionalidades
+
+| Requisito | Funcionalidade |
+|-----------|----------------|
+| RF01 | Cadastro, edição e exclusão de alunos |
+| RF02 | Cadastro, edição e exclusão de professores |
+| RF03 | Gestão de cursos e turmas, com matrícula de alunos |
+| RF04 | Agenda de aulas e encontros, com bloqueio de conflitos de horário |
+| RF05 | Chamada (registro de presença e falta) |
+| RF06 | Login, perfis de acesso e recuperação de senha por e-mail |
+| RF07 | Envio de materiais do professor para a turma ou para um aluno |
+| RF08 | Envio de gravações de prática pelo aluno |
+| RF09 | Notificações dentro do sistema |
+
+## Integrantes
+
+- Anita Felício dos Santos
+- Daniel Carrapeiro Mendes
+- Vitor Miguel Mendes de França
+
+## Tecnologias utilizadas
+
+| Camada | Tecnologias |
+|--------|-------------|
+| Backend | Node.js, Express |
+| Banco de dados | PostgreSQL 16, rodando em Docker (Docker Compose) |
+| Frontend | HTML, CSS e JavaScript puro, servidos pelo próprio backend |
+| Autenticação | JSON Web Token (`jsonwebtoken`) e senhas com hash `bcrypt` |
+| Upload de arquivos | Multer |
+| E-mail | Nodemailer (SMTP), usado na recuperação de senha e nos avisos de cancelamento |
+| Desenvolvimento | Nodemon (reinicia o servidor a cada alteração) |
+
+## Instruções para executar o sistema
+
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) (versão 18 ou mais recente)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) aberto e em execução
+- Git
+
+Não é preciso instalar o PostgreSQL: o banco roda dentro de um container Docker.
+
+### 1. Baixar o projeto
+
+```bash
+git clone https://github.com/VitorFranca089/SIGEM-TE.git
+cd SIGEM-TE
 ```
-sigem/
-├── ARQUITETURA.md             -> como as pecas se conectam e por que
-├── CLAUDE.md                  -> guia do projeto para o Claude Code
-├── backend/
-│   ├── src/
-│   │   ├── config/
-│   │   │   ├── db.js          -> conexao com o PostgreSQL
-│   │   │   └── schema.sql     -> script de criacao das tabelas
-│   │   ├── controllers/       -> logica de cada funcionalidade (RF01 a RF08)
-│   │   ├── middlewares/       -> login (autenticacao), limite de tentativas e recebimento de arquivos (upload)
-│   │   ├── routes/            -> health, auth, alunos, professores, cursos, turmas, aulas, grupos, arquivos
-│   │   └── server.js          -> arquivo principal do backend
-│   ├── uploads/               -> audios enviados; criada sozinha, fora do Git
-│   ├── package.json
-│   └── .env.example
-└── frontend/
-    ├── index.html             -> pagina inicial e menu
-    ├── css/style.css          -> estilo de todas as telas
-    └── js/main.js
+
+### 2. Subir o banco de dados
+
+```bash
+docker compose up -d
 ```
 
-## Como rodar pela primeira vez
+Na primeira execução, o Docker baixa a imagem do PostgreSQL e cria o banco
+`sigem_db` com todas as tabelas (`backend/src/config/schema.sql`). O banco fica
+disponível na porta **5433**, que só aceita conexões da própria máquina. A porta
+não é a 5432 padrão para não conflitar com outros projetos.
 
-### 1. Backend
+### 3. Configurar o backend
+
+Crie o arquivo `backend/.env` a partir do modelo. O modelo já vem configurado
+para o banco do Docker.
 
 ```bash
 cd backend
+cp .env.example .env        # no PowerShell ou no CMD: copy .env.example .env
 npm install
-cp .env.example .env
 ```
 
-Abra o arquivo `.env` e preencha `DB_PASSWORD` com a senha que voce definiu
-na instalacao do PostgreSQL.
+O SMTP é opcional. Sem ele, o sistema funciona normalmente, exceto pelo envio de
+e-mails. Para ativar, preencha as variáveis `SMTP_*` no `.env`.
 
-Para ativar a recuperacao de senha, preencha tambem `SMTP_HOST`, `SMTP_PORT`,
-`SMTP_USER`, `SMTP_PASSWORD` e `EMAIL_FROM` conforme o seu provedor de e-mail.
-O codigo enviado expira em 15 minutos por padrao; esse prazo pode ser alterado
-com `RECUPERACAO_EXPIRA_MINUTOS`. Sem SMTP configurado, o cadastro e o login
-continuam funcionando; a API mantém a mesma resposta genérica da recuperação
-para não revelar quais e-mails possuem conta, e registra a falha no servidor.
+### 4. Carregar os dados de demonstração (opcional, recomendado)
 
-Crie o banco `sigem_db`, se ainda nao existir, e rode o script das tabelas:
+Preenche o banco vazio com uma escola de exemplo, com cursos, turmas, aulas,
+chamadas e arquivos:
 
 ```bash
-psql -h localhost -U postgres -d sigem_db -f src/config/schema.sql
+npm run dados-demo
 ```
 
-Ele vai pedir a senha do PostgreSQL. Para conferir que deu certo:
+Para começar com o banco vazio, crie apenas o administrador com
+`npm run criar-admin`.
 
-```bash
-psql -h localhost -U postgres -d sigem_db -c '\dt'
-```
-
-Devem aparecer 14 tabelas. O pgAdmin4 continua util para *olhar* os dados.
-
-Para olhar os dados sem sair do VS Code, use a extensão **PostgreSQL**, de
-Chris Kolkman (`ckolkman.vscode-postgres`):
-
-1. Clique no ícone do elefante, na barra da esquerda, e depois no **+**.
-2. Preencha, nesta ordem: `localhost`, `postgres`, a senha do `DB_PASSWORD`,
-   `5432`, "Standard Connection", `sigem_db` e o nome `SIGEM local`.
-3. Para ver uma tabela: botão direito nela → **Select...** → **Run Select Top 1000**.
-4. Para escrever uma consulta: botão direito em `sigem_db` → **New Query**, e
-   **F5** roda.
-
-No terminal, o mesmo acesso é `psql -h localhost -U postgres -d sigem_db`:
-`\dt` lista as tabelas e `\q` sai.
-
-O `schema.sql` so tem `CREATE TABLE`, nunca `DROP` - assim ninguem apaga o banco
-sem querer. Se precisar recriar as tabelas do zero, os `DROP` sao feitos a mao.
-
-Em bancos que ja existiam antes da versao 0.5.0, aplique as tres migracoes
-abaixo **nesta ordem** - `migration_recuperacao_senha.sql`, depois
-`migration_rf03.sql` (secao RF03) e por ultimo `migration_rf04.sql` (secao
-RF04) - a ordem em que as funcionalidades nasceram, e a que foi testada. As
-tres podem ser rodadas de novo sem estragar nada. A primeira:
-
-```bash
-psql -h localhost -U postgres -d sigem_db -v ON_ERROR_STOP=1 -f src/config/migration_recuperacao_senha.sql
-```
-
-Suba o servidor:
+### 5. Iniciar o sistema
 
 ```bash
 npm run dev
 ```
 
-Se tudo estiver certo, o terminal vai mostrar:
-`Servidor do SIGEM rodando em http://localhost:3000`
+Quando aparecer `Servidor do SIGEM rodando em http://localhost:3000`, abra
+**http://localhost:3000/** no navegador.
 
-Teste no navegador: `http://localhost:3000/api/health` deve retornar um JSON
-com `"status": "ok"`. Depois teste `http://localhost:3000/api/health/db` -
-se retornar o horario do banco, a conexao com o PostgreSQL esta funcionando.
+### Logins de demonstração
 
-### 2. Frontend
+Disponíveis depois do passo 4. A senha é a mesma para todos: **`Banca@2026`**
 
-Nao precisa de instalacao nem de passo separado. O backend serve as telas
-junto: com `npm run dev` rodando, abra `http://localhost:3000/` no navegador.
+| Perfil        | E-mail              |
+|---------------|---------------------|
+| Administrador | admin@sigem.demo    |
+| Professor     | helena@sigem.demo   |
+| Professor     | marcos@sigem.demo   |
+| Aluno         | beatriz@sigem.demo  |
+| Aluno         | carlos@sigem.demo   |
+| Aluno         | daniela@sigem.demo  |
+| Aluno         | eduardo@sigem.demo  |
+| Aluno         | fernanda@sigem.demo |
 
-Clique no botao "Testar conexao com a API" na pagina -
-se aparecer o horario do banco em verde, o ambiente inteiro (frontend +
-backend + banco) esta funcionando de ponta a ponta.
+### Comandos úteis
 
-## RF03: cursos e turmas
+Rode os comandos do banco na raiz do projeto e os do servidor na pasta `backend/`.
 
-Depois de aplicar o `schema.sql` em um banco novo, ou a migracao abaixo em um
-banco que ja existia:
+| Comando                  | O que faz                                                |
+|--------------------------|----------------------------------------------------------|
+| `docker compose up -d`   | Liga o banco                                             |
+| `docker compose down`    | Desliga o banco e mantém os dados                        |
+| `docker compose down -v` | Apaga o banco inteiro; na próxima subida ele é recriado vazio |
+| `npm run dev`            | Inicia o servidor em modo de desenvolvimento             |
+| `npm run dados-demo`     | Carrega a escola de demonstração (só com o banco vazio)  |
+| `npm run criar-admin`    | Cria um usuário administrador                            |
 
-```bash
-psql -h localhost -U postgres -d sigem_db -v ON_ERROR_STOP=1 -f src/config/migration_rf03.sql
+### Problemas comuns
+
+- **"Falha ao conectar no banco":** confira se o Docker Desktop está aberto e
+  rode `docker compose up -d`.
+- **`EADDRINUSE` (porta 3000 em uso):** já existe outro servidor do SIGEM
+  rodando. Feche o terminal antigo ou aperte `Ctrl + C` nele.
+
+## Estrutura do projeto
+
+```
+SIGEM-TE/
+├── docker-compose.yml     -> banco PostgreSQL em Docker
+├── backend/
+│   ├── src/
+│   │   ├── config/        -> conexão com o banco, schema.sql e migrações
+│   │   ├── controllers/   -> lógica de cada funcionalidade
+│   │   ├── middlewares/   -> autenticação, limite de tentativas e upload
+│   │   ├── routes/        -> rotas da API (/api/...)
+│   │   ├── scripts/       -> criar-admin, dados-demo, testar-smtp
+│   │   ├── utils/         -> validação, e-mail e notificações
+│   │   └── server.js      -> arquivo principal do backend
+│   ├── package.json
+│   └── .env.example       -> modelo das configurações
+└── frontend/              -> telas em HTML, CSS e JavaScript
 ```
 
-Para habilitar capas editaveis nas turmas, aplique tambem:
-
-```bash
-psql -h localhost -U postgres -d sigem_db -v ON_ERROR_STOP=1 -f src/config/migration_capas_turma.sql
-```
-
-O administrador cadastra cursos e turmas em `Cursos` e `Turmas`. Professores
-podem solicitar uma turma informando curso, nome e horario; o administrador
-aprova, recusa, renomeia, troca o professor, atualiza o horario ou encerra a
-turma. Alunos sao adicionados dentro da turma, e a exclusao e logica para
-preservar historico.
-
-## RF04: agenda de aulas
-
-Depois de aplicar o `schema.sql` em um banco novo, ou a migracao abaixo em um
-banco existente:
-
-```bash
-psql -h localhost -U postgres -d sigem_db -v ON_ERROR_STOP=1 -f src/config/migration_rf04.sql
-```
-
-A tela `agenda.html` lista aulas regulares e encontros extracurriculares. Uma
-aula pertence a uma turma ou a um grupo, nunca aos dois. Grupos, professores e
-alunos participantes sao opcionais. O sistema recusa conflitos de professor e
-de alunos, preserva cancelamentos e permite ao professor cancelar apenas com
-pelo menos seis horas de antecedencia. O cancelamento tenta enviar aviso aos
-alunos envolvidos e a todos os administradores ativos; para isso, o SMTP do
-`.env` precisa estar configurado.
-
-## RF05: chamada
-
-Nao precisa de migracao: a tabela `frequencia` ja estava no `schema.sql`.
-
-A tela `chamada.html` (link "Chamada" na barra lateral, so para administrador e
-professor) lista as aulas de turma dos ultimos 7 dias; o campo "Aulas a partir
-de" deixa voltar mais. Escolhida uma aula, o professor marca presenca ou falta
-de cada aluno. A chamada abre no horario de inicio da aula e pode ser corrigida
-depois. Salvar marca a aula como realizada, e ela nao pode mais ser remarcada
-nem cancelada.
-
-## RF09: notificacoes
-
-Em bancos que ja existiam antes da versao 0.11.0, crie as duas tabelas novas
-(`arquivo_download` e `notificacao`). Pode ser rodada de novo sem estragar nada:
-
-```bash
-psql -h localhost -U postgres -d sigem_db -v ON_ERROR_STOP=1 -f src/config/migration_notificacao.sql
-```
-
-O link "Notificações" aparece na barra lateral dos tres perfis, com o numero
-das nao lidas. O aluno e avisado quando chega material para a turma dele ou
-para ele; o professor, quando um aluno da turma envia uma pratica e quando um
-aluno abre pela primeira vez um material que ele enviou. Nao depende de SMTP.
-
-## Proximos passos
-
-Com o ambiente validado, o desenvolvimento de cada funcionalidade (RF01 a RF09,
-conforme a Secao 4 do TCC) segue o padrao:
-
-1. Criar a rota em `backend/src/routes/`
-2. Criar o controller correspondente em `backend/src/controllers/`
-3. Criar a tela correspondente no frontend (`frontend/`), com base no
-   wireframe feito no Figma
+Mais detalhes sobre como as partes se conectam estão em `ARQUITETURA.md`, e o
+histórico de versões está em `CHANGELOG.md`.
